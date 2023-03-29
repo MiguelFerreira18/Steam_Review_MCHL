@@ -1,4 +1,8 @@
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 dt = pd.read_csv('steamReviews.csv', nrows=100)
 # --------------------Descricao das colunas--------------------
@@ -27,3 +31,6 @@ dt = pd.read_csv('steamReviews.csv', nrows=100)
 
 print(len(dt.dropna()))
 # print(dt.columns)
+
+
+
