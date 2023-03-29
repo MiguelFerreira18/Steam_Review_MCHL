@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 
-dt = pd.read_csv('steamReviews.csv', nrows=100)
+dt = pd.read_csv('steamReviews.csv', nrows=500000)
 # --------------------Descricao das colunas--------------------
 # app_id - ID do jogo, Discrete
 # app_name - Nome do jogo, Nominal
@@ -29,8 +30,28 @@ dt = pd.read_csv('steamReviews.csv', nrows=100)
 # author.last_played - Ultima vez que o autor jogou, Discrete
 # --------------------Descricao das colunas--------------------
 
-print(len(dt.dropna()))
-# print(dt.columns)
+languages = ["bulgarian", "croatian", "danish", "czech", "slovak", "slovenian", "slovak", "slovenian", 
+"spanish", "estonian", "finnish", "french", "greek", "hungarian", "irish", "italian", 
+"latvian", "lithuanian", "maltese", "dutch", "polish", "portuguese", "romanian", "swedish", "english", "brazilian"]
 
+# Eliminar linhas com linguagem diferente das selecionadas
+new_dt = dt[dt['language'].isin(languages)]
+
+# Eliminar colunas desnecessarias
+new_dt.drop(["Unnamed: 0"], axis=1, inplace=True)
+new_dt.drop(["written_during_early_access"], axis=1, inplace=True)
+
+# Resetar index
+new_dt.reset_index(drop=True, inplace=True)
+
+# Eliminar linhas com valores nulos
+new_dt.dropna(inplace=True)
+
+# Print da descricao do dataset
+print(new_dt.describe())
+
+# Print do heatmap entre as colunas
+sns.heatmap(new_dt.corr(), annot=True)
+plt.show()
 
 
