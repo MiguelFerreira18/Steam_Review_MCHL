@@ -5,7 +5,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 
-dt = pd.read_csv('steamReviews.csv', nrows=500000)
+dt = pd.read_csv('steamReviews.csv', nrows=200000) # nrows=2000000
 # --------------------Descricao das colunas--------------------
 # app_id - ID do jogo, Discrete
 # app_name - Nome do jogo, Nominal
@@ -47,8 +47,13 @@ new_dt.reset_index(drop=True, inplace=True)
 # Eliminar linhas com valores nulos
 new_dt.dropna(inplace=True)
 
-# Print da descricao do dataset
-print(new_dt.describe())
+# Print da descricao da coluna author.num_games_owned do dataset
+# print(new_dt.describe())
+print(new_dt["author.num_games_owned"].describe())
+
+# Print da correlacao entre as colunas author.num_games_owned e author.num_reviews
+print("COVARIANCIA: " , new_dt["author.playtime_forever"].cov(new_dt["author.playtime_at_review"]))
+print("CORRELACAO: " , new_dt["author.playtime_forever"].corr(new_dt["author.playtime_at_review"]))
 
 # Print do heatmap entre as colunas
 sns.heatmap(new_dt.corr(), annot=True)
