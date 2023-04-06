@@ -57,6 +57,39 @@ print("CORRELACAO: " , new_dt["author.playtime_forever"].corr(new_dt["author.pla
 
 # Print do heatmap entre as colunas
 sns.heatmap(new_dt.corr(), annot=True)
-plt.show()
+plt.figure()
 
+
+"""
+Transformacao {
+    normalizaçao --Analisar
+    padronizaçao --Analisar
+    transformaçao linear --Analisar
+}   
+"""
+#Nomralização
+myScalerMinMaxScaler = MinMaxScaler()
+norm = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_at_review']].values)
+print(norm)
+plt.plot(norm)
+plt.figure()
+
+
+#Standardização
+numberColumns = ["weighted_vote_score","author.playtime_forever","author.playtime_last_two_weeks"]
+scale= StandardScaler()
+scaled_data = scale.fit_transform(new_dt[numberColumns])
+plt.hist(scaled_data,100)
+plt.figure()
+
+
+##Transformaão linear simples
+linearTransformation = 4+2*new_dt["author.playtime_forever"]
+print(linearTransformation)
+plt.plot(linearTransformation)
+plt.figure()
+
+
+plt.plot(new_dt["author.playtime_forever"])
+plt.show()
 
