@@ -5,29 +5,29 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 
-dt = pd.read_csv('steamReviews.csv', nrows=200000) # nrows=2000000
+dt = pd.read_csv('steamReviews.csv', nrows=50000) # nrows=2000000
 # --------------------Descricao das colunas--------------------
-# app_id - ID do jogo, Discrete
-# app_name - Nome do jogo, Nominal
-# review_id - ID da review, Discrete
-# language - Linguagem da review, Nominal
-# review - Texto da review, Nominal
-# timestamp_created - Data de criacao da review, Discrete
-# timestamp_updated - Data de atualizacao da review, Discrete
-# recommended - Recomendado ou nao, Discrete
-# votes_helpful - Votos de utilidade, Discrete
-# votes_funny - Votos de humor, Discrete
-# weighted_vote_score - Media ponderada dos votos, Continuous
-# comment_count - Numero de comentarios, Discrete
-# steam_purchase - Comprado na Steam, Discrete
-# received_for_free - Recebido de graça, Discrete
-# written_during_early_access - Escrito durante o Early Access, Discrete
-# author.steamid - ID do autor, Discrete
-# author.num_games_owned - Numero de jogos do autor, Discrete
-# author.num_reviews - Numero de reviews do autor, Discrete
-# author.playtime_forever - Tempo de jogo total do autor, Continuous
-# author.playtime_last_two_weeks - Tempo de jogo nas ultimas duas semanas do autor, Continuous
-# author.last_played - Ultima vez que o autor jogou, Discrete
+#! app_id - ID do jogo, Discrete
+#! app_name - Nome do jogo, Nominal
+#! review_id - ID da review, Discrete
+#! language - Linguagem da review, Nominal
+#! review - Texto da review, Nominal
+#! timestamp_created - Data de criacao da review, Discrete
+#* timestamp_updated - Data de atualizacao da review, Discrete
+#* recommended - Recomendado ou nao, Discrete
+#* votes_helpful - Votos de utilidade, Discrete
+#* votes_funny - Votos de humor, Discrete
+#* weighted_vote_score - Media ponderada dos votos, Continuous
+#* comment_count - Numero de comentarios, Discrete
+#* steam_purchase - Comprado na Steam, Discrete
+#* received_for_free - Recebido de graça, Discrete
+#? written_during_early_access - Escrito durante o Early Access, Discrete
+#? author.steamid - ID do autor, Discrete
+#? author.num_games_owned - Numero de jogos do autor, Discrete
+#? author.num_reviews - Numero de reviews do autor, Discrete
+#? author.playtime_forever - Tempo de jogo total do autor, Continuous
+#? author.playtime_last_two_weeks - Tempo de jogo nas ultimas duas semanas do autor, Continuous
+#? author.last_played - Ultima vez que o autor jogou, Discrete
 # --------------------Descricao das colunas--------------------
 
 languages = ["bulgarian", "croatian", "danish", "czech", "slovak", "slovenian", "slovak", "slovenian", 
@@ -69,7 +69,18 @@ Transformacao {
 """
 #Nomralização
 myScalerMinMaxScaler = MinMaxScaler()
-norm = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_at_review']].values)
+
+
+#new_dt['author.playtime_forever'] = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_forever']])
+norm = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_forever']])
+# Plot the histogram of the normalized feature
+plt.hist(norm, bins=20)
+plt.title("author.playtime_forever - gpt")
+plt.xlabel('Author Playtime Forever (Normalized)')
+plt.ylabel('Frequency')
+plt.figure()
+
+norm = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_forever']])
 print(norm)
 plt.plot(norm)
 plt.figure()
