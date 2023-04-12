@@ -8,6 +8,9 @@ from sklearn.preprocessing import MinMaxScaler
 import SteamVariables as sv
 
 dt = pd.read_csv(sv.CSV_PATH, nrows=50000) # nrows=2000000
+pd.set_option('display.max_columns', None)
+#Dominio: Reviews da Steam
+#Tamanho: 2000000
 # --------------------Descricao das colunas--------------------
 #! app_id - ID do jogo, Discrete
 #! app_name - Nome do jogo, Nominal
@@ -19,7 +22,7 @@ dt = pd.read_csv(sv.CSV_PATH, nrows=50000) # nrows=2000000
 #* recommended - Recomendado ou nao, Discrete
 #* votes_helpful - Votos de utilidade, Discrete
 #* votes_funny - Votos de humor, Discrete
-#* weighted_vote_score - Media ponderada dos votos, Continuous
+#* weighted_vote_score - Ranking baseado no número de helpful votes, Continuous
 #* comment_count - Numero de comentarios, Discrete
 #* steam_purchase - Comprado na Steam, Discrete
 #* received_for_free - Recebido de graça, Discrete
@@ -50,6 +53,8 @@ new_dt.reset_index(drop=True, inplace=True)
 new_dt.dropna(inplace=True)
 
 # Print da descricao da coluna author.num_games_owned do dataset
+print(new_dt)
+
 print("<----------------------<>---------------------->")
 print("\n Timestamp Created: ", new_dt[sv.TIMESTAMP_CREATED].describe() , "\n")
 print("<----------------------<>---------------------->")
@@ -74,9 +79,22 @@ print("<----------------------<>---------------------->")
 print("\n Author Last Played: ", new_dt[sv.AUTHOR_LAST_PLAYED].describe())
 print("<----------------------<>---------------------->")
 
-# Print da correlacao entre as colunas author.num_games_owned e author.num_reviews
-print("Covariancia entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n" , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].cov(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]) , "\n")
-print("Correlacao entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n " , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].corr(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
+# Print da correlacao e covariancia entre as colunas author.num_games_owned e author.num_reviews
+print("Covariancia entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n" , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].cov(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
+print("Correlacao entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n " , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].corr(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]), "\n")
+
+# Print da correlacao e covariancia entre as colunas author.num_games_owned e author.num_reviews
+print("Covariancia entre votes helpful com votes funny: \n" , new_dt[sv.VOTES_HELPFUL].cov(new_dt[sv.VOTES_FUNNY]))
+print("Correlacao entre votes helpful com votes funny: \n " , new_dt[sv.VOTES_HELPFUL].corr(new_dt[sv.VOTES_FUNNY]), "\n")
+
+# Print da correlacao e covariancia entre as colunas author.num_games_owned e author.num_reviews
+print("Covariancia entre numero de jogos com numero de reviews: \n" , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].cov(new_dt[sv.AUTHOR_NUM_REVIEWS]))
+print("Correlacao entre numero de jogos com numero de reviews: \n " , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].corr(new_dt[sv.AUTHOR_NUM_REVIEWS]), "\n")
+
+#Print da correlacao e covariancia entre as colunas recomended e author.playtime_at_review
+print("Covariancia entre recomended com author.playtime_at_review: \n" , new_dt[sv.RECOMMENDED].cov(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
+print("Correlacao entre recomended com author.playtime_at_review: \n " , new_dt[sv.RECOMMENDED].corr(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
+
 
 # Print do heatmap entre as colunas
 sns.heatmap(new_dt.corr(), annot=True)
