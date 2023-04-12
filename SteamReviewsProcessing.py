@@ -44,6 +44,7 @@ new_dt = dt[dt[sv.LANGUAGE].isin(languages)]
 
 # Eliminar colunas desnecessarias
 new_dt.drop(["Unnamed: 0"], axis=1, inplace=True)
+new_dt.drop([sv.STEAM_PURCHASE], axis=1, inplace=True)
 new_dt.drop([sv.WRITTEN_DURING_EARLY_ACCESS], axis=1, inplace=True)
 
 # Resetar index
