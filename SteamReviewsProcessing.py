@@ -112,6 +112,18 @@ Transformacao {
     transformaçao linear --Analisar
 }   
 """
+
+##TEMP ALTERAR DEPOIS
+print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+
+print("TRANSFORMATION PART OF THE WORK\n")
+#create a new comumn tha picks the total votes of the review multiplys it by 5 and divides by the total ammount of votes_funny
+new_dt['total_votes'] = (new_dt[sv.VOTES_FUNNY] + new_dt[sv.VOTES_HELPFUL]) * 5 / (new_dt[sv.VOTES_FUNNY] + new_dt[sv.VOTES_HELPFUL])
+print(new_dt['total_votes'])
+
+print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+
+
 #Nomralização
 myScalerMinMaxScaler = MinMaxScaler()
 
