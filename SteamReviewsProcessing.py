@@ -5,7 +5,9 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 
-dt = pd.read_csv('steamReviews.csv', nrows=50000) # nrows=2000000
+import SteamVariables as sv
+
+dt = pd.read_csv(sv.CSV_PATH, nrows=50000) # nrows=2000000
 # --------------------Descricao das colunas--------------------
 #! app_id - ID do jogo, Discrete
 #! app_name - Nome do jogo, Nominal
@@ -35,11 +37,11 @@ languages = ["bulgarian", "croatian", "danish", "czech", "slovak", "slovenian", 
 "latvian", "lithuanian", "maltese", "dutch", "polish", "portuguese", "romanian", "swedish", "english", "brazilian"]
 
 # Eliminar linhas com linguagem diferente das selecionadas
-new_dt = dt[dt['language'].isin(languages)]
+new_dt = dt[dt[sv.LANGUAGE].isin(languages)]
 
 # Eliminar colunas desnecessarias
 new_dt.drop(["Unnamed: 0"], axis=1, inplace=True)
-new_dt.drop(["written_during_early_access"], axis=1, inplace=True)
+new_dt.drop([sv.WRITTEN_DURING_EARLY_ACCESS], axis=1, inplace=True)
 
 # Resetar index
 new_dt.reset_index(drop=True, inplace=True)
@@ -49,17 +51,19 @@ new_dt.dropna(inplace=True)
 
 # Print da descricao da coluna author.num_games_owned do dataset
 # print(new_dt.describe())
-print(new_dt["author.num_games_owned"].describe())
+print(new_dt[sv.AUTHOR_NUM_GAMES_OWNED].describe())
 
 # Print da correlacao entre as colunas author.num_games_owned e author.num_reviews
-print("COVARIANCIA: " , new_dt["author.playtime_forever"].cov(new_dt["author.playtime_at_review"]))
-print("CORRELACAO: " , new_dt["author.playtime_forever"].corr(new_dt["author.playtime_at_review"]))
+print("COVARIANCIA: " , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].cov(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
+print("CORRELACAO: " , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].corr(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
 
 # Print do heatmap entre as colunas
 sns.heatmap(new_dt.corr(), annot=True)
 plt.figure()
 
-
+#! Scatter plot com Votes funny e Votes helpful language
+#! total_Time Recommended or not
+#! HISTOGRAMA COM O TEMPO DE JOGO ASSIM COMO O VIOLIN PLOT
 """
 Transformacao {
     normalizaçao --Analisar
@@ -72,7 +76,7 @@ myScalerMinMaxScaler = MinMaxScaler()
 
 
 #new_dt['author.playtime_forever'] = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_forever']])
-norm = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_forever']])
+norm = myScalerMinMaxScaler.fit_transform(new_dt[[sv.AUTHOR_PLAYTIME_FOREVER]])
 # Plot the histogram of the normalized feature
 plt.hist(norm, bins=20)
 plt.title("author.playtime_forever - gpt")
@@ -80,14 +84,14 @@ plt.xlabel('Author Playtime Forever (Normalized)')
 plt.ylabel('Frequency')
 plt.figure()
 
-norm = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_forever']])
+norm = myScalerMinMaxScaler.fit_transform(new_dt[sv.AUTHOR_PLAYTIME_FOREVER])
 print(norm)
 plt.plot(norm)
 plt.figure()
 
 
 #Standardização
-numberColumns = ["weighted_vote_score","author.playtime_forever","author.playtime_last_two_weeks"]
+numberColumns = [sv.WEIGHTED_VOTE_SCORE,sv.AUTHOR_PLAYTIME_FOREVER,sv.AUTHOR_PLAYTIME_LAST_TWO_WEEKS]
 scale= StandardScaler()
 scaled_data = scale.fit_transform(new_dt[numberColumns])
 plt.hist(scaled_data,100)
@@ -95,12 +99,12 @@ plt.figure()
 
 
 ##Transformaão linear simples
-linearTransformation = 4+2*new_dt["author.playtime_forever"]
+linearTransformation = 4+2*new_dt[sv.AUTHOR_PLAYTIME_FOREVER]
 print(linearTransformation)
 plt.plot(linearTransformation)
 plt.figure()
 
 
-plt.plot(new_dt["author.playtime_forever"])
+plt.plot(new_dt[sv.AUTHOR_PLAYTIME_FOREVER])
 plt.show()
 
