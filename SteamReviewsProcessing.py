@@ -97,7 +97,9 @@ print("Correlacao entre recomended com author.playtime_at_review: \n " , new_dt[
 
 
 # Print do heatmap entre as colunas
-sns.heatmap(new_dt.corr(), annot=True)
+df_heatmap = new_dt.drop("author.steamid", axis=1) # Eliminar coluna author.steamid,pois esta nao faz sentido usar
+df_heatmap = df_heatmap.drop("app_id", axis=1) # Eliminar coluna review_id,pois esta nao faz sentido usar
+sns.heatmap(df_heatmap.corr(), annot=True)
 plt.figure()
 
 #! Scatter plot com Votes funny e Votes helpful language
