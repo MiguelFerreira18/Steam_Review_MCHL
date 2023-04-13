@@ -119,46 +119,35 @@ print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 print("TRANSFORMATION PART OF THE WORK\n")
 #create a new comumn tha picks the total votes of the review multiplys it by 5 and divides by the total ammount of votes_funny
-new_dt['total_votes'] = (new_dt[sv.VOTES_FUNNY] + new_dt[sv.VOTES_HELPFUL]) * 5 / (new_dt[sv.VOTES_FUNNY] + new_dt[sv.VOTES_HELPFUL])
-print(new_dt['total_votes'])
-
-print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 
-#Nomralização
+
+#!Linear Transformation
+new_dt['total_votes'] = (new_dt[sv.VOTES_HELPFUL] * 5 )/ (new_dt[sv.VOTES_HELPFUL].max())
+print(new_dt['total_votes'].mean())
+
+
+#!Normalization of total votes
 myScalerMinMaxScaler = MinMaxScaler()
-
-
-#new_dt['author.playtime_forever'] = myScalerMinMaxScaler.fit_transform(new_dt[['author.playtime_forever']])
-norm = myScalerMinMaxScaler.fit_transform(new_dt[[sv.AUTHOR_PLAYTIME_FOREVER]])
+normalizedColumn = myScalerMinMaxScaler.fit_transform(new_dt[['total_votes']].values)
 # Plot the histogram of the normalized feature
-plt.hist(norm, bins=20)
-plt.title("author.playtime_forever - gpt")
-plt.xlabel('Author Playtime Forever (Normalized)')
+plt.plot(normalizedColumn)
+plt.title("Total votes - Normalized")
+plt.xlabel('Tota Votes')
 plt.ylabel('Frequency')
 plt.figure()
 
-norm = myScalerMinMaxScaler.fit_transform(new_dt[[sv.AUTHOR_PLAYTIME_FOREVER]])
-print(norm)
-plt.plot(norm)
-plt.figure()
 
-
-#Standardização
-numberColumns = [sv.WEIGHTED_VOTE_SCORE,sv.AUTHOR_PLAYTIME_FOREVER,sv.AUTHOR_PLAYTIME_LAST_TWO_WEEKS]
-scale= StandardScaler()
-scaled_data = scale.fit_transform(new_dt[numberColumns])
-plt.hist(scaled_data,100)
-plt.figure()
-
-
-##Transformaão linear simples
-linearTransformation = 4+2*new_dt[sv.AUTHOR_PLAYTIME_FOREVER]
-print(linearTransformation)
-plt.plot(linearTransformation)
-plt.figure()
-
-
-plt.plot(new_dt[sv.AUTHOR_PLAYTIME_FOREVER])
+#!Standardization of total votes
+myStandardScaler = StandardScaler()
+standardizedColumn = myStandardScaler.fit_transform(new_dt[['total_votes']])
+# Plot the histogram of the standardized feature
+plt.hist(standardizedColumn)
+plt.title("Total votes - Standardized")
+plt.xlabel('Tota Votes')
+plt.ylabel('Frequency')
 plt.show()
+
+
+
 
