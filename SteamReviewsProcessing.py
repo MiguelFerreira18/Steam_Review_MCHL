@@ -88,15 +88,15 @@ print("Correlacao entre tempo total de jogo com tempo total jogado quando a revi
 sns.scatterplot(data=new_dt, x=sv.AUTHOR_PLAYTIME_FOREVER, y=sv.AUTHOR_PLAYTIME_AT_REVIEW)
 plt.figure()
 
-#? faz sentido fazer? alterar depois agr vou almoçar
-sns.pairplot(new_dt[[sv.AUTHOR_NUM_GAMES_OWNED,sv.AUTHOR_PLAYTIME_FOREVER]])
-plt.show()
+#? faz sentido fazer?
+#*sns.pairplot(new_dt[[sv.AUTHOR_NUM_GAMES_OWNED,sv.AUTHOR_PLAYTIME_FOREVER]])
+#*plt.show()
 
-# Print da correlacao e covariancia entre as colunas author.num_games_owned e author.num_reviews
+# Print da correlacao e covariancia entre as colunas author.votes_funny e author.votes_helpful
 print("Covariancia entre votes helpful com votes funny: \n" , new_dt[sv.VOTES_HELPFUL].cov(new_dt[sv.VOTES_FUNNY]))
 print("Correlacao entre votes helpful com votes funny: \n " , new_dt[sv.VOTES_HELPFUL].corr(new_dt[sv.VOTES_FUNNY]), "\n")
 
-#! Scatterplot entre as colunas author.num_games_owned e author.num_reviews
+#! Scatterplot entre as colunas author.votes_helpful e author.votes_funny
 sns.scatterplot(data=new_dt, x=sv.VOTES_HELPFUL, y=sv.VOTES_FUNNY)
 plt.figure()
 
@@ -126,6 +126,7 @@ plt.figure()
 #! Scatter plot com Votes funny e Votes helpful language
 #! total_Time Recommended or not
 #! HISTOGRAMA COM O TEMPO DE JOGO ASSIM COMO O VIOLIN PLOT
+
 """
 Transformacao {
     normalizaçao --Analisar
