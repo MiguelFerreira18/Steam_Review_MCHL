@@ -197,18 +197,15 @@ print(new_dt['total_votes'].mean())
 #!Normalization of total votes
 myScalerMinMaxScaler = MinMaxScaler()
 normalizedColumn = myScalerMinMaxScaler.fit_transform(new_dt[['total_votes']].values)
-# Plot the histogram of the normalized feature
 plt.plot(normalizedColumn)
 plt.title("Total votes - Normalized")
-plt.xlabel('Tota Votes')
-plt.ylabel('Frequency')
+plt.xlabel('Samples')
+plt.ylabel('Normalized Total Votes')
 plt.show()
-
 
 #!Standardization of total votes
 myStandardScaler = StandardScaler()
 standardizedColumn = myStandardScaler.fit_transform(new_dt[['total_votes']])
-# Plot the histogram of the standardized feature
 plt.hist(standardizedColumn)
 plt.title("Total votes - Standardized")
 plt.xlabel('Tota Votes')
