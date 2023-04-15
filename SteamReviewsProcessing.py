@@ -51,6 +51,12 @@ new_dt.drop([sv.WRITTEN_DURING_EARLY_ACCESS], axis=1, inplace=True)
 new_dt.reset_index(drop=True, inplace=True)
 
 # Eliminar linhas com valores nulos
+new_dt[sv.AUTHOR_NUM_GAMES_OWNED].fillna(new_dt[sv.AUTHOR_NUM_GAMES_OWNED].mean(), inplace=True)
+new_dt[sv.AUTHOR_NUM_REVIEWS].fillna(new_dt[sv.AUTHOR_NUM_REVIEWS].mean(), inplace=True)
+new_dt[sv.AUTHOR_PLAYTIME_FOREVER].fillna(new_dt[sv.AUTHOR_PLAYTIME_FOREVER].mean(), inplace=True)
+new_dt[sv.AUTHOR_PLAYTIME_LAST_TWO_WEEKS].fillna(new_dt[sv.AUTHOR_PLAYTIME_LAST_TWO_WEEKS].mean(), inplace=True)
+new_dt[sv.AUTHOR_LAST_PLAYED].fillna(new_dt[sv.AUTHOR_LAST_PLAYED].mean(), inplace=True)
+
 new_dt.dropna(inplace=True)
 
 # Print da descricao da coluna author.num_games_owned do dataset
