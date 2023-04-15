@@ -90,6 +90,19 @@ print(top_2_games)
 sns.boxplot(data=new_dt, x=sv.APP_NAME, y=sv.VOTES_HELPFUL)
 plt.show()
 
+#? Este Serve?
+new_dt["review_char_count"] = new_dt["review"].apply(len)
+
+# Create a subset of the data that excludes reviews with character counts greater than 1000
+steam_data_subset = new_dt[new_dt["review_char_count"] <= 100]
+
+ax = sns.boxplot(x="app_name", y="review_char_count", data=steam_data_subset)
+
+# Set the x-axis tick labels to be spaced farther apart
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=8)
+#? Este Serve?
+
+
 #! Violinplot da coluna weighted_vote_score
 sns.violinplot(x=sv.WEIGHTED_VOTE_SCORE, data=new_dt)
 plt.show()
