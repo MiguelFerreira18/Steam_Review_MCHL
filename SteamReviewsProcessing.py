@@ -90,13 +90,7 @@ print("<----------------------<>---------------------->")
 print("Covariancia entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n" , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].cov(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
 print("Correlacao entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n " , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].corr(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]), "\n")
 
-#! Boxplot, verificar amanhã
-top_2_games = new_dt.groupby(sv.APP_NAME)[sv.REVIEW_ID].count().sort_values(ascending=False).head(2).index.tolist()
-print(top_2_games)
-sns.boxplot(data=new_dt, x=sv.APP_NAME, y=sv.VOTES_HELPFUL)
-plt.show()
-
-#? Este Serve?
+#! Boxplot
 new_dt["review_char_count"] = new_dt["review"].apply(len)
 
 # Create a subset of the data that excludes reviews with character counts greater than 1000
@@ -106,7 +100,7 @@ ax = sns.boxplot(x="app_name", y="review_char_count", data=steam_data_subset)
 
 # Set the x-axis tick labels to be spaced farther apart
 ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=8)
-#? Este Serve?
+
 
 
 #! Violinplot da coluna weighted_vote_score
