@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 import SteamVariables as sv
 
-dt = pd.read_csv(sv.CSV_PATH, nrows=500000) # nrows=2000000
+dt = pd.read_csv(sv.CSV_PATH, nrows=2000000) # nrows=2000000
 pd.set_option('display.max_columns', None)
 #Dominio: Reviews da Steam
 #Tamanho: 2000000
@@ -90,6 +90,25 @@ print("<----------------------<>---------------------->")
 print("Covariancia entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n" , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].cov(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
 print("Correlacao entre tempo total de jogo com tempo total jogado quando a review foi publicada: \n " , new_dt[sv.AUTHOR_PLAYTIME_FOREVER].corr(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]), "\n")
 
+# Print da correlacao e covariancia entre as colunas author.votes_funny e author.votes_helpful
+print("Covariancia entre votes helpful com votes funny: \n" , new_dt[sv.VOTES_HELPFUL].cov(new_dt[sv.VOTES_FUNNY]))
+print("Correlacao entre votes helpful com votes funny: \n " , new_dt[sv.VOTES_HELPFUL].corr(new_dt[sv.VOTES_FUNNY]), "\n")
+
+# Print da correlacao e covariancia entre as colunas author.num_games_owned e author.num_reviews
+print("Covariancia entre numero de jogos com numero de reviews: \n" , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].cov(new_dt[sv.AUTHOR_NUM_REVIEWS]))
+print("Correlacao entre numero de jogos com numero de reviews: \n " , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].corr(new_dt[sv.AUTHOR_NUM_REVIEWS]), "\n")
+
+#Print da correlacao e covariancia entre numero de jogos e tempo de jogo total
+print("Covariancia entre numero de jogos com tempo de jogo total: \n" , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].cov(new_dt[sv.AUTHOR_PLAYTIME_FOREVER]))
+print("Correlacao entre numero de jogos com tempo de jogo total: \n " , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].corr(new_dt[sv.AUTHOR_PLAYTIME_FOREVER]))
+
+
+# Print do heatmap entre as colunas
+df_heatmap = new_dt.drop("author.steamid", axis=1) # Eliminar coluna author.steamid,pois esta nao faz sentido usar
+df_heatmap = df_heatmap.drop("app_id", axis=1) # Eliminar coluna review_id,pois esta nao faz sentido usar
+sns.heatmap(df_heatmap.corr(), annot=True)
+plt.show()
+
 #! Boxplot
 new_dt["review_char_count"] = new_dt["review"].apply(len)
 
@@ -138,40 +157,17 @@ plt.show()
 sns.pairplot(new_dt[[sv.AUTHOR_NUM_GAMES_OWNED,sv.AUTHOR_PLAYTIME_FOREVER]])
 plt.show()
 
-# Print da correlacao e covariancia entre as colunas author.votes_funny e author.votes_helpful
-print("Covariancia entre votes helpful com votes funny: \n" , new_dt[sv.VOTES_HELPFUL].cov(new_dt[sv.VOTES_FUNNY]))
-print("Correlacao entre votes helpful com votes funny: \n " , new_dt[sv.VOTES_HELPFUL].corr(new_dt[sv.VOTES_FUNNY]), "\n")
 
 #! Scatterplot entre as colunas author.votes_helpful e author.votes_funny
 sns.scatterplot(data=new_dt, x=sv.VOTES_HELPFUL, y=sv.VOTES_FUNNY)
 plt.show()
 
-# Print da correlacao e covariancia entre as colunas author.num_games_owned e author.num_reviews
-print("Covariancia entre numero de jogos com numero de reviews: \n" , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].cov(new_dt[sv.AUTHOR_NUM_REVIEWS]))
-print("Correlacao entre numero de jogos com numero de reviews: \n " , new_dt[sv.AUTHOR_NUM_GAMES_OWNED].corr(new_dt[sv.AUTHOR_NUM_REVIEWS]), "\n")
 
 #! Scatterplot entre as colunas author.num_games_owned e author.num_reviews
 sns.scatterplot(data=new_dt, x=sv.AUTHOR_NUM_GAMES_OWNED, y=sv.AUTHOR_NUM_REVIEWS)
 plt.show()
 
 
-#Print da correlacao e covariancia entre as colunas recomended e author.playtime_at_review
-print("Covariancia entre recomended com author.playtime_at_review: \n" , new_dt[sv.RECOMMENDED].cov(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
-print("Correlacao entre recomended com author.playtime_at_review: \n " , new_dt[sv.RECOMMENDED].corr(new_dt[sv.AUTHOR_PLAYTIME_AT_REVIEW]))
-
-#? recommended boolean, scatterplot n faz sentido
-
-
-
-# Print do heatmap entre as colunas
-df_heatmap = new_dt.drop("author.steamid", axis=1) # Eliminar coluna author.steamid,pois esta nao faz sentido usar
-df_heatmap = df_heatmap.drop("app_id", axis=1) # Eliminar coluna review_id,pois esta nao faz sentido usar
-sns.heatmap(df_heatmap.corr(), annot=True)
-plt.show()
-
-#! Scatter plot com Votes funny e Votes helpful language
-#! total_Time Recommended or not
-#! HISTOGRAMA COM O TEMPO DE JOGO ASSIM COMO O VIOLIN PLOT
 
 """
 Transformacao {
