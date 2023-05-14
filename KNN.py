@@ -49,3 +49,5 @@ clf.fit(X_train, Y_train)
 y_pred = clf.predict(X_test)
 print("----------Classification report-----------")
 print(classification_report(Y_test, y_pred))
+
+##AQUI PODIA VIR O OPEN AI, DAR CLASSIFICAÇÃO
