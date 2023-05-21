@@ -2,6 +2,8 @@ from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+from Classification import Classification
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -51,3 +53,7 @@ print("----------Classification report-----------")
 print(classification_report(Y_test, y_pred))
 
 ##AQUI PODIA VIR O OPEN AI, DAR CLASSIFICAÇÃO
+
+myClass = Classification()
+
+myClass.knn(X_train,Y_train ,X_test, Y_test)

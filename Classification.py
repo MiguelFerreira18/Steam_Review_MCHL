@@ -17,16 +17,19 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
 
 
 
 
 class Classification:
-    def logistic(self,MyScaler,X_train,Y_train,X_test,Y_test):
+    def logistic(self,X_train,Y_train,X_test,Y_test):
         # Logistic Regression
         ##Make a pipeline and a gridsearch to find the best parameters
-        pipe = Pipeline([('scaler', MyScaler), ('logistic', LogisticRegression())])
-        mod = GridSearchCV(pipe, param_grid={'logistic__C': [0.01, 0.1, 1, 10, 100]}, cv=5)
+        pipe = Pipeline([('scaler', StandardScaler()), ('logistic', LogisticRegression())])
+        mod = GridSearchCV(estimator=pipe,
+                            param_grid={'logistic__C': [0.01, 0.1, 1, 10, 100]},
+                            cv=5)
         mod.fit(X_train, Y_train)
         print("Best parameters are: ", mod.best_params_)
         print("Best score is: ", mod.best_score_)
@@ -40,11 +43,13 @@ class Classification:
         plt.show()
 
 
-    def naiveBayes(self,MyScaler,X_train,Y_train,X_test,Y_test):
+    def naiveBayes(self,X_train,Y_train,X_test,Y_test):
         ##Naive Bayes
         ##Make a pipeline and a gridsearch to find the best parameters
-        pipe = Pipeline([('scaler', MyScaler), ('naiveBayes', GaussianNB())])
-        mod = GridSearchCV(pipe, param_grid={'naiveBayes__var_smoothing': np.logspace(0,-9, num=100)}, cv=5)
+        pipe = Pipeline([('scaler', StandardScaler()), ('naiveBayes', GaussianNB())])
+        mod = GridSearchCV(estimator=pipe,
+                            param_grid={'naiveBayes__var_smoothing': np.logspace(0,-9, num=100)},
+                             cv=5)
         mod.fit(X_train, Y_train)
         print("Best parameters are: ", mod.best_params_)
         print("Best score is: ", mod.best_score_)
@@ -58,11 +63,16 @@ class Classification:
         plt.show()
 
 
-    def knn(self,MyScaler,X_train,Y_train,X_test,Y_test):
+    def knn(self,X_train,Y_train,X_test,Y_test):
         ##KNN
         ##Make a pipeline and a gridsearch to find the best parameters
-        pipe = Pipeline([('scaler', MyScaler), ('knn', KNeighborsClassifier())])
-        mod = GridSearchCV(pipe, param_grid={'knn__n_neighbors': [1, 3, 5, 7, 9]}, cv=5)
+        pipe = Pipeline([('scaler', StandardScaler()), ('knn', KNeighborsClassifier())])
+        mod = GridSearchCV(estimator = pipe,
+                            param_grid={'knn__n_neighbors': [1, 3, 5,6 ,7,8,9,10,11,12],
+                                        'knn__weights': ['uniform', 'distance'],
+                                        'knn__leaf_size':[1,4,7,10],
+                                        'knn__p':[1,2]},
+                            cv=5)
         mod.fit(X_train, Y_train)
         print("Best parameters are: ", mod.best_params_)
         print("Best score is: ", mod.best_score_)
@@ -78,11 +88,13 @@ class Classification:
 
         
 
-    def svm(self,MyScaler,X_train,Y_train,X_test,Y_test):
+    def svm(self,X_train,Y_train,X_test,Y_test):
         ##SVm
         ##Make a pipeline and a gridsearch to find the best parameter
-        pipe = Pipeline([('scaler', MyScaler), ('svm', SVC())])
-        mod = GridSearchCV(pipe, param_grid={'svm__C': [0.01, 0.1, 1, 10, 100]}, cv=5)
+        pipe = Pipeline([('scaler', StandardScaler()), ('svm', SVC())])
+        mod = GridSearchCV(estimator=pipe,
+                            param_grid={'svm__C': [0.01, 0.1, 1, 10, 100]},
+                             cv=5)
         mod.fit(X_train, Y_train)
         print("Best parameters are: ", mod.best_params_)
         print("Best score is: ", mod.best_score_)
@@ -96,11 +108,13 @@ class Classification:
         plt.show()
 
 
-    def decisionTree(self,MyScaler,X_train,Y_train,X_test,Y_test):
+    def decisionTree(self,X_train,Y_train,X_test,Y_test):
         ##Decision Tree
         ##Make a pipeline and a gridsearch to find the best parameters
-        pipe = Pipeline([('scaler', MyScaler), ('decisionTree', DecisionTreeClassifier())])
-        mod = GridSearchCV(pipe, param_grid={'decisionTree__max_depth': [1, 3, 5, 7, 9]}, cv=5)
+        pipe = Pipeline([('scaler', StandardScaler()), ('decisionTree', DecisionTreeClassifier())])
+        mod = GridSearchCV(estimator=pipe,
+                        param_grid={'decisionTree__max_depth': [1, 3, 5, 7, 9]},
+                        cv=5)
         mod.fit(X_train, Y_train)
         print("Best parameters are: ", mod.best_params_)
         print("Best score is: ", mod.best_score_)
