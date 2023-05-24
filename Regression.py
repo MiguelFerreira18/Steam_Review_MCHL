@@ -13,7 +13,9 @@ from sklearn import metrics
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.neighbors import KNeighborsRegressor
-
+from sklearn.ensemble import AdaBoostRegressor
+from xgboost import XGBRegressor
+from sklearn.decomposition import PCA
 
 class Regression:
     def linearRegression(self,X_train,Y_train,X_test,Y_test):
@@ -63,19 +65,23 @@ class Regression:
         model = Lasso(alpha=0.10).fit(X_train, Y_train)
         print("Lasso Regression value: " , model.score(X_test, Y_test))
 
+
     def svmRegression(self, X_train, Y_train, X_test, Y_test):
-        pipe = Pipeline([('scaler', StandardScaler()), ('svmRegression', svm.SVR())])
+        pipe = Pipeline([('scaler', StandardScaler()), ('pca', PCA(n_components=2)), ('svmRegression', svm.SVR())])
+        
         mod = GridSearchCV(estimator=pipe,
-                        param_grid={'svmRegression__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-                                    'svmRegression__C': [0.01, 0.1, 1, 10, 100],
-                                    'svmRegression__gamma': [0.01, 0.1, 1, 10, 100]},
-                        cv=5)
+            param_grid={'svmRegression__kernel': ['linear'],
+                        'svmRegression__C': [1],
+                        'svmRegression__gamma': [1]},
+            cv=5
+        )
         mod.fit(X_train, Y_train)
         print("Best parameters are:", mod.best_params_)
         print("Best score is:", mod.best_score_)
         model = svm.SVR(kernel='linear', C=1, gamma=1)
         model.fit(X_train, Y_train)
         print("SVM Regression value:", model.score(X_test, Y_test))
+
 
 
     def knnRegression(self, X_train, Y_train, X_test, Y_test):
@@ -105,4 +111,31 @@ class Regression:
         print("R2 score:", r2_score(Y_test, model.predict(X_test)))
         print("MAE score:", mean_absolute_error(Y_test, model.predict(X_test)))
 
-    def boomRegression
+    def adaBoostRegression(self, X_train, Y_train, X_test, Y_test):
+        pipe = Pipeline([('scaler', StandardScaler()), ('adaBoostRegression', AdaBoostRegressor())])
+        mod = GridSearchCV(estimator=pipe,
+                        param_grid={'adaBoostRegression__n_estimators': [50, 100, 150, 200],
+                                    'adaBoostRegression__learning_rate': [0.01, 0.1, 1, 10, 100]},
+                        cv=5)
+        mod.fit(X_train, Y_train)
+        print("Best parameters are:", mod.best_params_)
+        print("Best score is:", mod.best_score_)
+        model = AdaBoostRegressor(n_estimators=200, learning_rate=0.01)
+        model.fit(X_train, Y_train)
+        print("R2 score:", r2_score(Y_test, model.predict(X_test)))
+        print("MAE score:", mean_absolute_error(Y_test, model.predict(X_test)))
+
+    def xBoostRegression(self, X_train, Y_train, X_test, Y_test):
+        pipe = Pipeline([('scaler', StandardScaler()), ('xBoostRegression', XGBRegressor())])
+        mod = GridSearchCV(estimator=pipe,
+                        param_grid={'xBoostRegression__n_estimators': [50, 100, 150, 200],
+                                    'xBoostRegression__learning_rate': [0.01, 0.1, 1, 10, 100],
+                                    'xBoostRegression__max_depth': [3, 5, 7, 9, 11, 13, 15]},
+                        cv=5)
+        mod.fit(X_train, Y_train)
+        print("Best parameters are:", mod.best_params_)
+        print("Best score is:", mod.best_score_)
+        model = XGBRegressor(n_estimators=200, learning_rate=0.01, max_depth=3)
+        model.fit(X_train, Y_train)
+        print("R2 score:", r2_score(Y_test, model.predict(X_test)))
+        print("MAE score:", mean_absolute_error(Y_test, model.predict(X_test)))

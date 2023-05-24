@@ -84,8 +84,6 @@ class Classification:
         cm = confusion_matrix(Y_test, Y_pred)
         ConfusionMatrixDisplay(cm).plot()
         plt.show()
-
-
         
 
     def svm(self,X_train,Y_train,X_test,Y_test):
