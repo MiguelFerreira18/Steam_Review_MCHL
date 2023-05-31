@@ -1,4 +1,5 @@
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 import pandas as pd
 import SteamVariables as sv
 from sklearn.linear_model import LinearRegression
@@ -111,6 +112,7 @@ class Regression:
         print("R2 score:", r2_score(Y_test, model.predict(X_test)))
         print("MAE score:", mean_absolute_error(Y_test, model.predict(X_test)))
 
+##!BOOSTING
     def adaBoostRegression(self, X_train, Y_train, X_test, Y_test):
         pipe = Pipeline([('scaler', StandardScaler()), ('adaBoostRegression', AdaBoostRegressor())])
         mod = GridSearchCV(estimator=pipe,
@@ -139,3 +141,18 @@ class Regression:
         model.fit(X_train, Y_train)
         print("R2 score:", r2_score(Y_test, model.predict(X_test)))
         print("MAE score:", mean_absolute_error(Y_test, model.predict(X_test)))
+    ##!BAGGING RANDOM FOREST
+    def randomForestRegression(self, X_train, Y_train, X_test, Y_test):
+        pipe = Pipeline([('scaler', StandardScaler()), ('randomForestRegression', RandomForestRegressor())])
+        mod = GridSearchCV(estimator=pipe,
+                        param_grid={'randomForestRegression__n_estimators': [50, 100, 150, 200],
+                                    'randomForestRegression__max_depth': [3, 5, 7, 9, 11, 13, 15]},
+                        cv=5)
+        mod.fit(X_train, Y_train)
+        print("Best parameters are:", mod.best_params_)
+        print("Best score is:", mod.best_score_)
+        model = RandomForestRegressor(n_estimators=200, max_depth=3)
+        model.fit(X_train, Y_train)
+        print("R2 score:", r2_score(Y_test, model.predict(X_test)))
+        print("MAE score:", mean_absolute_error(Y_test, model.predict(X_test)))
+    

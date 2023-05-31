@@ -19,6 +19,13 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from xgboost import XGBClassifier
+
+
+from sklearn.ensemble import RandomForestClassifier
+
 
 
 
@@ -124,4 +131,72 @@ class Classification:
         cm = confusion_matrix(Y_test, Y_pred)
         ConfusionMatrixDisplay(cm).plot()
         plt.show()
+
+    #!BOOSTING
+    def adaBoosting(self,X_train,Y_train,X_test,Y_test):
+        ##AdaBoosting
+        ##Make a pipeline and a gridsearch to find the best parameters
+        pipe = Pipeline([('scaler', StandardScaler()), ('adaBoosting', AdaBoostClassifier())])
+        mod = GridSearchCV(estimator=pipe,
+                            param_grid={'adaBoosting__n_estimators': [1, 3, 5, 7, 9]},
+                             cv=5)
+        mod.fit(X_train, Y_train)
+        print("Best parameters are: ", mod.best_params_)
+        print("Best score is: ", mod.best_score_)
+        adaBoosting = AdaBoostClassifier(n_estimators=mod.best_params_['adaBoosting__n_estimators'])
+        adaBoosting.fit(X_train, Y_train)
+        Y_pred = adaBoosting.predict(X_test)
+        print("----------Classification report-----------")
+        print(classification_report(Y_test, Y_pred))
+        cm = confusion_matrix(Y_test, Y_pred)
+    
+    def xboosting(self,X_train,Y_train,X_test,Y_test):
+        ##XGBoosting
+        ##Make a pipeline and a gridsearch to find the best parameters
+        pipe = Pipeline([('scaler', StandardScaler()), ('xgBoosting', XGBClassifier())])
+        mod = GridSearchCV(estimator=pipe,
+                            param_grid={'xgBoosting__n_estimators': [1, 3, 5, 7, 9]},
+                             cv=5)
+        mod.fit(X_train, Y_train)
+        print("Best parameters are: ", mod.best_params_)
+        print("Best score is: ", mod.best_score_)
+        xgBoosting = XGBClassifier(n_estimators=mod.best_params_['xgBoosting__n_estimators'])
+        xgBoosting.fit(X_train, Y_train)
+        Y_pred = xgBoosting.predict(X_test)
+        print("----------Classification report-----------")
+        print(classification_report(Y_test, Y_pred))
+        cm = confusion_matrix(Y_test, Y_pred)
+    
+    def randomForest(self,X_train,Y_train,X_test,Y_test):
+        ##Random Forest
+        ##Make a pipeline and a gridsearch to find the best parameters
+        pipe = Pipeline([('scaler', StandardScaler()), ('randomForest', RandomForestClassifier())])
+        mod = GridSearchCV(estimator=pipe,
+                            param_grid={'randomForest__n_estimators': [1, 3, 5, 7, 9]},
+                             cv=5)
+        mod.fit(X_train, Y_train)
+        print("Best parameters are: ", mod.best_params_)
+        print("Best score is: ", mod.best_score_)
+        randomForest = RandomForestClassifier(n_estimators=mod.best_params_['randomForest__n_estimators'])
+        randomForest.fit(X_train, Y_train)
+        Y_pred = randomForest.predict(X_test)
+        print("----------Classification report-----------")
+        print(classification_report(Y_test, Y_pred))
+        cm = confusion_matrix(Y_test, Y_pred)
+    def gradientBoosting (self,X_train,Y_train,X_test,Y_test):
+        ##Gradient Boosting
+        ##Make a pipeline and a gridsearch to find the best parameters
+        pipe = Pipeline([('scaler', StandardScaler()), ('gradientBoosting', GradientBoostingClassifier())])
+        mod = GridSearchCV(estimator=pipe,
+                            param_grid={'gradientBoosting__n_estimators': [1, 3, 5, 7, 9]},
+                             cv=5)
+        mod.fit(X_train, Y_train)
+        print("Best parameters are: ", mod.best_params_)
+        print("Best score is: ", mod.best_score_)
+        gradientBoosting = GradientBoostingClassifier(n_estimators=mod.best_params_['gradientBoosting__n_estimators'])
+        gradientBoosting.fit(X_train, Y_train)
+        Y_pred = gradientBoosting.predict(X_test)
+        print("----------Classification report-----------")
+        print(classification_report(Y_test, Y_pred))
+        cm = confusion_matrix(Y_test, Y_pred)
 

@@ -24,9 +24,8 @@ standardized_df_pca = pca.fit_transform(standardized_df)
 print(pca.explained_variance_ratio_)
 
 nn = NearestNeighbors(n_neighbors=10, metric='euclidean')
-nn.fit(standardized_df)
-distances, indices = nn.kneighbors(standardized_df)
-
+nn.fit(standardized_df_pca)
+distances, indices = nn.kneighbors(standardized_df_pca)
 # Create a dictionary that maps usernames to indices
 indices_dict = {username: i for i, username in enumerate(df.index)}
 
