@@ -40,6 +40,7 @@ languages = ["bulgarian", "croatian", "danish", "czech", "slovak", "slovenian", 
 
 # Eliminar linhas com linguagem diferente das selecionadas
 new_dt = dt[dt[sv.LANGUAGE].isin(languages)]
+print(new_dt[sv.WEIGHTED_VOTE_SCORE].max())
 
 # Eliminar colunas desnecessarias
 new_dt.drop(["Unnamed: 0"], axis=1, inplace=True)

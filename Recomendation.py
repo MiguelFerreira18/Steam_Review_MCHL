@@ -13,6 +13,16 @@ df = df.dropna()
 
 #print(df.groupby('app_name').first().reset_index())
 
+
+#!Linear Transformation
+df['total_votes'] = (df[sv.VOTES_HELPFUL] * 5 )/ (df[sv.VOTES_HELPFUL].max())
+print(df['total_votes'].mean())
+feature_columnsNew= [sv.AUTHOR_STEAMID,sv.APP_NAME,'total_votes']
+
+new_dt = df[feature_columnsNew]
+print(new_dt)
+
+
 feature_columns = [sv.RECOMMENDED, sv.WEIGHTED_VOTE_SCORE, sv.COMMENT_COUNT,
                    sv.STEAM_PURCHASE, sv.RECEIVED_FOR_FREE, sv.WRITTEN_DURING_EARLY_ACCESS]
 df[feature_columns] = df[feature_columns].astype(np.float32)
