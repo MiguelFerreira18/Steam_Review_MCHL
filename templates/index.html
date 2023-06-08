@@ -10,97 +10,20 @@
 <body>
     <div class="container">
         <form action="/submit" method="post">
-            <div class="mb-3">
-                <label for="app_id" class="form-label">APP_ID:</label>
-                <input type="text" class="form-control" id="app_id" name="app_id">
-            </div>
-            <div class="mb-3">
-                <label for="app_name" class="form-label">APP_NAME:</label>
-                <input type="text" class="form-control" id="app_name" name="app_name">
-            </div>
-            <div class="mb-3">
-                <label for="review_id" class="form-label">REVIEW_ID:</label>
-                <input type="text" class="form-control" id="review_id" name="review_id">
-            </div>
-            <div class="mb-3">
-                <label for="language" class="form-label">LANGUAGE:</label>
-                <input type="text" class="form-control" id="language" name="language">
-            </div>
-            <div class="mb-3">
-                <label for="review" class="form-label">REVIEW:</label>
-                <input type="text" class="form-control" id="review" name="review">
-            </div>
-            <div class="mb-3">
-                <label for="timestamp_created" class="form-label">TIMESTAMP_CREATED:</label>
-                <input type="text" class="form-control" id="timestamp_created" name="timestamp_created">
-            </div>
-            <div class="mb-3">
-                <label for="timestamp_updated" class="form-label">TIMESTAMP_UPDATED:</label>
-                <input type="text" class="form-control" id="timestamp_updated" name="timestamp_updated">
-            </div>
-            <div class="mb-3">
-                <label for="recommended" class="form-label">RECOMMENDED:</label>
-                <input type="text" class="form-control" id="recommended" name="recommended">
-            </div>
-            <div class="mb-3">
-                <label for="votes_helpful" class="form-label">VOTES_HELPFUL:</label>
-                <input type="text" class="form-control" id="votes_helpful" name="votes_helpful">
-            </div>
-            <div class="mb-3">
-                <label for="votes_funny" class="form-label">VOTES_FUNNY:</label>
-                <input type="text" class="form-control" id="votes_funny" name="votes_funny">
-            </div>
-            <div class="mb-3">
-                <label for="weighted_vote_score" class="form-label">WEIGHTED_VOTE_SCORE:</label>
-                <input type="text" class="form-control" id="weighted_vote_score" name="weighted_vote_score">
-            </div>
-            <div class="mb-3">
-                <label for="comment_count" class="form-label">COMMENT_COUNT:</label>
-                <input type="text" class="form-control" id="comment_count" name="comment_count">
-            </div>
-            <div class="mb-3">
-                <label for="steam_purchase" class="form-label">STEAM_PURCHASE:</label>
-                <input type="text" class="form-control" id="steam_purchase" name="steam_purchase">
-            </div>
-            <div class="mb-3">
-                <label for="received_for_free" class="form-label">RECEIVED_FOR_FREE:</label>
-                <input type="text" class="form-control" id="received_for_free" name="received_for_free">
-            </div>
-            <div class="mb-3">
-                <label for="written_during_early_access" class="form-label">WRITTEN_DURING_EARLY_ACCESS:</label>
-                <input type="text" class="form-control" id="written_during_early_access" name="written_during_early_access">
-            </div>
-            <div class="mb-3">
-                <label for="author_steamid" class="form-label">AUTHOR_STEAMID:</label>
-                <input type="text" class="form-control" id="author_steamid" name="author_steamid">
-            </div>
-            <div class="mb-3">
-                <label for="author_num_games_owned" class="form-label">AUTHOR_NUM_GAMES_OWNED:</label>
-                <input type="text" class="form-control" id="author_num_games_owned" name="author_num_games_owned">
-            </div>
-            <div class="mb-3">
-                <label for="author_num_reviews" class="form-label">AUTHOR_NUM_REVIEWS:</label>
-                <input type="text" class="form-control" id="author_num_reviews" name="author_num_reviews">
-            </div>
-            <div class="mb-3">
-                <label for="author_playtime_at_review" class="form-label">AUTHOR_PLAYTIME_AT_REVIEW:</label>
-                <input type="text" class="form-control" id="author_playtime_at_review" name="author_playtime_at_review">
-            </div>
-            <div class="mb-3">
-                <label for="author_playtime_forever" class="form-label">AUTHOR_PLAYTIME_FOREVER:</label>
-                <input type="text" class="form-control" id="author_playtime_forever" name="author_playtime_forever">
-            </div>
-            <div class="mb-3">
-                <label for="author_playtime_last_two_weeks" class="form-label">AUTHOR_PLAYTIME_LAST_TWO_WEEKS:</label>
-                <input type="text" class="form-control" id="author_playtime_last_two_weeks" name="author_playtime_last_two_weeks">
-            </div>
-            <div class="mb-3">
-                <label for="author_last_played" class="form-label">AUTHOR_LAST_PLAYED:</label>
-                <input type="text" class="form-control" id="author_last_played" name="author_last_played">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+          <div class="mb-3">
+            <select name="frutas" title="Selecione uma fruta" class="form-select">
+              {% for fruta in frutas %}
+              <option value="{{ fruta }}">{{ fruta }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <textarea readonly>{{ conteudo }}</textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-    </div>
+      </div>
+      
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>

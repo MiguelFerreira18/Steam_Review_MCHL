@@ -20,5 +20,6 @@ AUTHOR_PLAYTIME_AT_REVIEW = "author.playtime_at_review"
 AUTHOR_PLAYTIME_FOREVER = "author.playtime_forever"
 AUTHOR_PLAYTIME_LAST_TWO_WEEKS = "author.playtime_last_two_weeks"
 AUTHOR_LAST_PLAYED = "author.last_played"
+REVIEW_SCORE = "review_score"
 
 CSV_PATH = "steamReviews.csv"
