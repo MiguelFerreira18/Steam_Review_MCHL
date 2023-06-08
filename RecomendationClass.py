@@ -16,7 +16,6 @@ import random
 import sys
 from nltk.sentiment import SentimentIntensityAnalyzer
 from importlib import reload
-from surprise import KNNBasic
 from surprise import Dataset
 from surprise import accuracy
 from surprise import SVD
@@ -28,7 +27,7 @@ class Recommendation:
     users = None
     reviews = None
     def __init__(self):
-        df = pd.read_csv(sv.CSV_PATH, nrows=8000000)##Chama o dataset
+        df = pd.read_csv(sv.CSV_PATH, nrows=12000000)##Chama o dataset
         df = df.dropna()##Elimina os nas para mais segurança
         languages = [ ##Linguagens a ser removidas
             "bulgarian",
@@ -62,7 +61,7 @@ class Recommendation:
         # Eliminar linhas com linguagem diferente das selecionadas
         df = df[df[sv.LANGUAGE].isin(languages)]
         df = shuffle(df, random_state=60)#Mete as linhas do data set aleatórias (Perserva o id inicial da linha)
-        sample_dt = df.sample(n=50000) ##Corta o dataSet que levou shuffle para 50 k de valores
+        sample_dt = df.sample(n=40000) ##Corta o dataSet que levou shuffle para 50 k de valores
         df = pd.DataFrame(sample_dt) 
 
         self.users = df[sv.AUTHOR_STEAMID].unique()

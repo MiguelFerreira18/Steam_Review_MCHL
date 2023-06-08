@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,jsonify
 from RecomendationClass import Recommendation
+import json
 
 app = Flask(__name__)
 
@@ -9,12 +10,14 @@ recomendationSystem = None
 def hello_world():
     return render_template('index.html')
 
-@app.route("/users", methods=['GET'])
+@app.route("/users", methods=['POST'])
 def users():
+    global recomendationSystem
     print("ENTREI PORRA")
-    recomendationSystem = Recommendation()
-    users = recomendationSystem.users
-    return render_template('index.html', users=users)
+    if(recomendationSystem is None):
+        recomendationSystem = Recommendation()
+    users = recomendationSystem.users.tolist()
+    return jsonify(users)
 
 @app.route("/invoke-function", methods=['POST'])
 def invoke_function():
