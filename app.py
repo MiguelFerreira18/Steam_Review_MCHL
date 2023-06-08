@@ -1,6 +1,10 @@
 from flask import Flask, render_template
+import RecomendationClass
 
 app = Flask(__name__)
+
+recomendationSystem = RecomendationClass()
+
 
 @app.route("/")
 def hello_world():
