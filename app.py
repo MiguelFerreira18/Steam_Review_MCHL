@@ -1,21 +1,26 @@
-from flask import Flask, render_template
-import RecomendationClass
+from flask import Flask, render_template, request
+from RecomendationClass import Recommendation
 
 app = Flask(__name__)
 
-recomendationSystem = RecomendationClass()
-
+recomendationSystem = None
 
 @app.route("/")
 def hello_world():
-    frutas = ['Maçã', 'Laranja', 'Banana']
-    conteudo = 'Conteúdo /n de /n exemplo'
+    return render_template('index.html')
 
-    return render_template('index.html', frutas=frutas, conteudo=conteudo)
+@app.route("/users", methods=['GET'])
+def users():
+    print("ENTREI PORRA")
+    recomendationSystem = Recommendation()
+    users = recomendationSystem.users
+    return render_template('index.html', users=users)
 
-@app.route("/submit", methods=['POST'])
-def submit_form():
-    return "Form submitted successfully!"
+@app.route("/invoke-function", methods=['POST'])
+def invoke_function():
+    selected_user = request.form['selected_user']
+    allReviews = recomendationSystem.getReviews(selected_user)
+    return render_template('index.html', users=recomendationSystem.users, allReviews=allReviews)
 
 if __name__ == "__main__":
     app.run(debug=True)

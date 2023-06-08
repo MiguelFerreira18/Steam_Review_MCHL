@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import euclidean_distances
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.neighbors import NearestNeighbors
 from sklearn.decomposition import PCA
@@ -19,9 +23,10 @@ from surprise import SVD
 from surprise import Reader
 from surprise.model_selection import train_test_split, cross_validate
 
-
 class Recommendation:
     new_dt = None
+    users = None
+    reviews = None
     def __init__(self):
         df = pd.read_csv(sv.CSV_PATH, nrows=8000000)##Chama o dataset
         df = df.dropna()##Elimina os nas para mais segurança
@@ -55,15 +60,18 @@ class Recommendation:
         ]
 
         # Eliminar linhas com linguagem diferente das selecionadas
-        df = df[self.df[sv.LANGUAGE].isin(languages)]
+        df = df[df[sv.LANGUAGE].isin(languages)]
         df = shuffle(df, random_state=60)#Mete as linhas do data set aleatórias (Perserva o id inicial da linha)
-        sample_dt = self.df.sample(n=50000) ##Corta o dataSet que levou shuffle para 50 k de valores
+        sample_dt = df.sample(n=50000) ##Corta o dataSet que levou shuffle para 50 k de valores
         df = pd.DataFrame(sample_dt) 
 
-        df["review_score"] = df["review_score"].apply(lambda x: self.__converter_valor(x))## Cria uma nova coluna com os novos valores convertidos entre 0 a 5
+        self.users = df[sv.AUTHOR_STEAMID].unique()
+        self.users = self.users[:100]
+        print(len(self.users))
+
+        df[sv.REVIEW_SCORE] = df[sv.REVIEW].apply(lambda x: self.__converter_valor(x))## Cria uma nova coluna com os novos valores convertidos entre 0 a 5
         feature_columnsNew = [sv.AUTHOR_STEAMID, sv.APP_NAME, "review_score"] 
         new_dt = df[feature_columnsNew]
-
 
         reader = Reader(rating_scale=(0, 1))##cria um novo Reader para o SVD
 
@@ -86,6 +94,7 @@ class Recommendation:
     # Função para converter os valores
     def __converter_valor(self, review):
         valor = self.__sentiment(review)
+        valor = valor["compound"]
         if valor < -0.5:
             return 1
         elif valor >= -0.5 and valor < 0:
@@ -98,6 +107,11 @@ class Recommendation:
             return 5
         else:
             return 0
+
+    def getReviews(self, userId):
+        ## Retorna uma lista com os reviews de um usuario
+        reviews = self.df[self.df[sv.AUTHOR_STEAMID] == userId]
+        return reviews
 
 
     def __get_game_id(book_title, metadata):

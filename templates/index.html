@@ -10,15 +10,18 @@
 <body>
     <div class="container">
         <form action="/submit" method="post">
-          <div class="mb-3">
-            <select name="frutas" title="Selecione uma fruta" class="form-select">
-              {% for fruta in frutas %}
-              <option value="{{ fruta }}">{{ fruta }}</option>
-              {% endfor %}
-            </select>
-          </div>
+            <div class="mb-3">
+                <form action="/invoke-function" method="post">
+                  <select id="myDropdown" name="users" title="Selecione um utilizador" class="form-select" onchange="this.form.submit()">
+                    {% for user in users %}
+                    <option id="userOp" value="{{ user }}">{{ user }}</option>
+                    {% endfor %}
+                  </select>
+                  <input type="hidden" name="selected_user" value="">
+                </form>
+              </div>                          
           <div>
-            <textarea readonly>{{ conteudo }}</textarea>
+            <textarea readonly>{{ allReviews }}</textarea>
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -27,5 +30,36 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function getStatus() {
+            console.log('Getting status');
+            $.ajax({
+                url: 'http://127.0.0.1:5000/users',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response);
+                    var users = response.data.users
+                    populateDropdown(users);
+                    
+                },
+                error: function () {
+                    console.log('Failed to get status');
+                }
+            });
+        }
+        getStatus();
+
+        function populateDropdown(data) {
+            var dropdown = $('#myDropdown');
+
+            // Clear any existing options
+            dropdown.empty();
+
+            // Iterate over the data and create options
+            $.each(data, function(index, item) {
+                dropdown.append($('<option></option>').val(item.value).text(item.label));
+            });
+            }
+         </script>
 </body>
 </html>
