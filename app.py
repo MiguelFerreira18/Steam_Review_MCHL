@@ -16,7 +16,7 @@ def users():
     print("ENTREI PORRA")
     if(recomendationSystem is None):
         recomendationSystem = Recommendation()
-    
+    print(recomendationSystem.users[0])
     users = recomendationSystem.users.tolist()
     return jsonify(users)
 

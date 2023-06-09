@@ -29,7 +29,7 @@ class Recommendation:
     users = None
     reviews = None
     def __init__(self):
-        self.df = pd.read_csv(sv.CSV_PATH, nrows=9000000)##Chama o dataset
+        self.df = pd.read_csv(sv.CSV_PATH, nrows=100000)##Chama o dataset
         
         self.df = self.df.dropna()##Elimina os nas para mais segurança
         languages = [ ##Linguagens a ser removidas
@@ -68,10 +68,10 @@ class Recommendation:
         sample_dt = self.df.sample(n=600) ##Corta o dataSet que levou shuffle para 50 k de valores
         self.df = pd.DataFrame(sample_dt) 
 
-        self.users = self.df[self.df[sv.AUTHOR_NUM_REVIEWS] != 0][sv.AUTHOR_STEAMID].unique()
+        self.users = self.df[sv.AUTHOR_STEAMID].unique()
 
         self.users = self.users[:100]
-        print(len(self.users))
+        print(self.users[0])
 
         self.df[sv.REVIEW_SCORE] = self.df[sv.REVIEW].apply(lambda x: self.__converter_valor(x))## Cria uma nova coluna com os novos valores convertidos entre 0 a 5
         feature_columnsNew = [sv.AUTHOR_STEAMID, sv.APP_NAME, "review_score"] 
@@ -117,8 +117,12 @@ class Recommendation:
 
     def getReviews(self, userId):
         ## Retorna uma lista com os reviews de um usuario
-        reviews = self.dt_for_comments[(self.dt_for_comments[sv.AUTHOR_STEAMID] != userId)]
-        print(reviews[sv.REVIEW])
+        print(type(userId))
+        print(userId)
+        reviews = self.dt_for_comments[(self.dt_for_comments[sv.AUTHOR_STEAMID] == int(userId))]
+        review = self.dt_for_comments[self.dt_for_comments.eq(userId).any(axis=1)]
+        print(review[sv.REVIEW].tolist())
+        print(reviews[sv.REVIEW].tolist())
         return reviews[sv.REVIEW]
 
 

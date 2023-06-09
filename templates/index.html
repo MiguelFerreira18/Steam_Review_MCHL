@@ -26,7 +26,7 @@
         </form>
       </div>
       <div>
-        <textarea readonly>{{ allReviews }}</textarea>
+        <textarea id="box" readonly>{{ allReviews }}</textarea>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
@@ -88,11 +88,14 @@
           // Handle the response data here
           console.log(response.users);
           console.log(response.allReviews);
+          $("#box").val(response)
         },
         error: function (error) {
           // Handle any errors that occur during the request
           console.error("Error:", error);
         }
+
+
       });
 
     }
