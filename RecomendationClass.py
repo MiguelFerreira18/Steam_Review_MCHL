@@ -27,7 +27,7 @@ class Recommendation:
     users = None
     reviews = None
     def __init__(self):
-        df = pd.read_csv(sv.CSV_PATH, nrows=12000000)##Chama o dataset
+        df = pd.read_csv(sv.CSV_PATH, nrows=1000)##Chama o dataset
         df = df.dropna()##Elimina os nas para mais segurança
         languages = [ ##Linguagens a ser removidas
             "bulgarian",
@@ -60,8 +60,8 @@ class Recommendation:
 
         # Eliminar linhas com linguagem diferente das selecionadas
         df = df[df[sv.LANGUAGE].isin(languages)]
-        df = shuffle(df, random_state=60)#Mete as linhas do data set aleatórias (Perserva o id inicial da linha)
-        sample_dt = df.sample(n=40000) ##Corta o dataSet que levou shuffle para 50 k de valores
+        df = shuffle(df, random_state=1)#Mete as linhas do data set aleatórias (Perserva o id inicial da linha)
+        sample_dt = df.sample(n=100) ##Corta o dataSet que levou shuffle para 50 k de valores
         df = pd.DataFrame(sample_dt) 
 
         self.users = df[sv.AUTHOR_STEAMID].unique()
@@ -70,11 +70,11 @@ class Recommendation:
 
         df[sv.REVIEW_SCORE] = df[sv.REVIEW].apply(lambda x: self.__converter_valor(x))## Cria uma nova coluna com os novos valores convertidos entre 0 a 5
         feature_columnsNew = [sv.AUTHOR_STEAMID, sv.APP_NAME, "review_score"] 
-        new_dt = df[feature_columnsNew]
+        self.new_dt = df[feature_columnsNew]
 
         reader = Reader(rating_scale=(0, 1))##cria um novo Reader para o SVD
 
-        data = Dataset.load_from_df(new_dt, reader=reader)
+        data = Dataset.load_from_df(self.new_dt, reader=reader)
         trainSet, testSet = train_test_split(data, test_size=0.2, random_state=60)
         algo = SVD()
         print(data)
@@ -109,7 +109,7 @@ class Recommendation:
 
     def getReviews(self, userId):
         ## Retorna uma lista com os reviews de um usuario
-        reviews = self.df[self.df[sv.AUTHOR_STEAMID] == userId]
+        reviews = self.new_dt[(self.new_dt[sv.AUTHOR_STEAMID] == userId)]
         return reviews
 
 

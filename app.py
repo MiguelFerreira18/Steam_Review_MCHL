@@ -21,9 +21,16 @@ def users():
 
 @app.route("/invoke-function", methods=['POST'])
 def invoke_function():
-    selected_user = request.form['selected_user']
+    global recomendationSystem
+    selected_user = request.form.get('selected_user')
+    print(selected_user)
     allReviews = recomendationSystem.getReviews(selected_user)
-    return render_template('index.html', users=recomendationSystem.users, allReviews=allReviews)
+    users = recomendationSystem.users.tolist()
+    print(allReviews.values.tolist())
+    return jsonify(users=users, allReviews=allReviews.values.tolist())
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

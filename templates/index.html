@@ -17,12 +17,12 @@
       <div class="mb-3">
         <form action="/invoke-function" method="post">
           <select id="myDropdown" name="users" title="Selecione um utilizador" class="form-select"
-            onchange="this.form.submit()">
+            onchange=fillReviews()>
+
             {% for user in users %}
             <option id="userOp" value="{{ user }}">{{ user }}</option>
             {% endfor %}
           </select>
-          <input type="hidden" name="selected_user" value="">
         </form>
       </div>
       <div>
@@ -74,6 +74,28 @@
       } else {
         console.log('Invalid data format');
       }
+    }
+
+    function fillReviews() {
+      var selectedUser = {
+        "selected_user":$("#myDropdown option:selected").val()
+      };
+      console.log(selectedUser)
+      $.ajax({
+        url: "/invoke-function",
+        type: "POST",
+        data: selectedUser,
+        success: function (response) {
+          // Handle the response data here
+          console.log(response.users);
+          console.log(response.allReviews);
+        },
+        error: function (error) {
+          // Handle any errors that occur during the request
+          console.error("Error:", error);
+        }
+      });
+
     }
   </script>
 </body>
