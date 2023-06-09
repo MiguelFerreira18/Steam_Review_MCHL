@@ -16,12 +16,12 @@ def users():
     print("ENTREI PORRA")
     if(recomendationSystem is None):
         recomendationSystem = Recommendation()
+    
     users = recomendationSystem.users.tolist()
     return jsonify(users)
 
 @app.route("/invoke-function", methods=['POST'])
 def invoke_function():
-    global recomendationSystem
     selected_user = request.form.get('selected_user')
     print(selected_user)
     allReviews = recomendationSystem.getReviews(selected_user)
