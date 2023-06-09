@@ -64,7 +64,7 @@ class Recommendation:
         sample_dt = df.sample(n=100) ##Corta o dataSet que levou shuffle para 50 k de valores
         df = pd.DataFrame(sample_dt) 
 
-        self.users = df[sv.AUTHOR_STEAMID].unique()
+        self.users = df[df[sv.REVIEW].notnull()][sv.AUTHOR_STEAMID].unique()
         self.users = self.users[:100]
         print(len(self.users))
 

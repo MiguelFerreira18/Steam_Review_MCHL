@@ -30,7 +30,5 @@ def invoke_function():
     return jsonify(users=users, allReviews=allReviews.values.tolist())
 
 
-
-
 if __name__ == "__main__":
     app.run(debug=True)
