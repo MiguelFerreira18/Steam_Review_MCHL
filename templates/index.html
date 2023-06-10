@@ -30,16 +30,17 @@
 
 <body>
   <div class="container">
-    <form action="/submit" method="post">
-      <div class="mb-3">
-        <select id="myDropdown" name="users" title="Select a user" class="form-select" onchange="fillReviews()">
-        </select>
-      </div>
-      <div>
-        <div id="reviewsList" class="row"></div>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <div class="mb-3">
+      <select id="myDropdown" name="users" title="Select a user" class="form-select" onchange="fillReviews()">
+      </select>
+    </div>
+    <div>
+      <div id="reviewsList" class="row"></div>
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="submit()">Submit</button>
+  </div>
+  <div class="container" id="recomendations">
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
@@ -135,6 +136,46 @@
         }
       });
     }
+
+    function submit() {
+      var selectedUser = {
+        "selected_user": $("#myDropdown option:selected").val()
+      };
+
+      $.ajax({
+        url: "/submit",
+        type: "POST",
+        data: selectedUser,
+        success: function (response) {
+          var recommendations = response;
+          console.log(recommendations)
+
+          var recommendationsContainer = $('#recomendations');
+
+          // Clear any existing recommendations
+          recommendationsContainer.empty();
+
+          // Create a card for each recommendation
+          $.each(recommendations, function (index, recommendation) {
+            var card = $('<div>').addClass('card mb-3').attr('id', 'recommendationCard');
+            var cardBody = $('<div>').addClass('card-body').attr('id', 'recommendationCardBody');
+            var title = $('<h5>').addClass('card-title').attr('id', 'recommendationTitle').text(recommendation);
+
+            $('#recommendationCard').css('margin-bottom', '20px');
+            $('#recommendationCardBody').css('padding', '20px');
+            cardBody.append(title);
+            card.append(cardBody);
+            recommendationsContainer.append(card);
+          });
+
+        },
+        error: function (error) {
+          // Handle any errors that occur during the request
+          console.error("Error:", error);
+        }
+      });
+    }
+
   </script>
 </body>
 

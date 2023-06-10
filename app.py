@@ -32,6 +32,12 @@ def invoke_function():
     print(allReviews.values.tolist())
     return jsonify(users=users, allReviews=allReviews.values.tolist())
 
+@app.route("/submit", methods=['POST'])
+def submit():
+    user = request.form.get('selected_user')
+    recomendation = recomendationSystem.generate_recommendation(user)
+    return jsonify(recomendation=recomendation)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

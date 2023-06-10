@@ -28,8 +28,9 @@ class Recommendation:
     dt_for_comments = None
     users = None
     reviews = None
+    algo = None
     def __init__(self):
-        self.df = pd.read_csv(sv.CSV_PATH, nrows=5000000)##Chama o dataset
+        self.df = pd.read_csv(sv.CSV_PATH, nrows=12000000)##Chama o dataset
         
         self.df = self.df.dropna()##Elimina os nas para mais segurança
         languages = [ ##Linguagens a ser removidas
@@ -91,13 +92,13 @@ class Recommendation:
 
         data = Dataset.load_from_df(self.new_dt, reader=reader)
         trainSet, testSet = train_test_split(data, test_size=0.2, random_state=60)
-        algo = SVD()
+        self.algo = SVD()
         print(data)
-        algo.fit(trainSet)
-        predictions = algo.test(testSet)
+        self.algo.fit(trainSet)
+        predictions = self.algo.test(testSet)
         accuracy.rmse(predictions)
         accuracy.mae(predictions)
-        cross_validate(algo, data, measures=["RMSE", "MAE"], cv=5, verbose=True)
+        cross_validate(self.algo, data, measures=["RMSE", "MAE"], cv=5, verbose=True)
 
 
     def __sentiment(self, review):
@@ -132,7 +133,7 @@ class Recommendation:
         return reviews[[sv.REVIEW, sv.APP_NAME]]
 
 
-    def __get_game_id(game_title, metadata):
+    def __get_game_id(self,game_title, metadata):
         """
         Gets the game ID for a game title based on the closest match in the metadata dataframe.
         """
@@ -144,7 +145,7 @@ class Recommendation:
         ].values[0]
         return game_id
 
-    def __get_game_info(game_id, metadata):
+    def __get_game_info(self,game_id, metadata):
         """
         Returns some basic information about a book given the book id and the metadata dataframe.
         """
@@ -164,7 +165,8 @@ class Recommendation:
         review_prediction = model.predict(uid=user_id, iid=game_id)
         return review_prediction.est
 
-    def generate_recommendation(self,user_id, model, metadata, thresh=0.15):
+    def generate_recommendation(self,user_id, thresh=0.15):
+        print(user_id)
         jogos = []
         """
         Generates a book recommendation for a user based on a rating threshold. Only
@@ -176,13 +178,16 @@ class Recommendation:
 
         i = 0
         for game_title in lista_app:
-            rating = self.__predict_review(user_id, game_title, model, metadata)
+            rating = self.__predict_review(user_id, game_title, self.algo, self.df)
             print(rating)
 
             if rating >= thresh:
-                game_id = self.__get_game_id(game_title, metadata)
-                jogos.append(self.__get_game_info(game_id, metadata))
+                game_id = self.__get_game_id(game_title, self.df)
+                game = self.__get_game_info(game_id, self.df)
+                jogos.append(game)
+                
                 i += 1
             if i == 3:
+                print(jogos)
                 return jogos
         return jogos
