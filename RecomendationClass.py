@@ -29,7 +29,7 @@ class Recommendation:
     users = None
     reviews = None
     def __init__(self):
-        self.df = pd.read_csv(sv.CSV_PATH, nrows=100000)##Chama o dataset
+        self.df = pd.read_csv(sv.CSV_PATH, nrows=5000000)##Chama o dataset
         
         self.df = self.df.dropna()##Elimina os nas para mais segurança
         languages = [ ##Linguagens a ser removidas
@@ -64,13 +64,20 @@ class Recommendation:
         # Eliminar linhas com linguagem diferente das selecionadas
         self.df = self.df[self.df[sv.LANGUAGE].isin(languages)]
         self.dt_for_comments = self.df
-        self.df = shuffle(self.df, random_state=1)#Mete as linhas do data set aleatórias (Perserva o id inicial da linha)
-        sample_dt = self.df.sample(n=600) ##Corta o dataSet que levou shuffle para 50 k de valores
+        self.df = shuffle(self.df, random_state=60)#Mete as linhas do data set aleatórias (Perserva o id inicial da linha)
+        self.df = self.df.dropna(subset=[sv.REVIEW])
+        sample_dt = self.df.sample(n=40000) ##Corta o dataSet que levou shuffle para 50 k de valores
         self.df = pd.DataFrame(sample_dt) 
 
-        self.users = self.df[sv.AUTHOR_STEAMID].unique()
-
-        self.users = self.users[:100]
+        users_with_values = []
+        for user in self.df[sv.AUTHOR_STEAMID]:
+            if self.df[self.df[sv.AUTHOR_STEAMID] == user].count().min() > 0:
+                print(user)
+                users_with_values.append(str(user))
+            if len(users_with_values) == 100:
+                break
+            
+        self.users = users_with_values
         print(self.users[0])
 
         self.df[sv.REVIEW_SCORE] = self.df[sv.REVIEW].apply(lambda x: self.__converter_valor(x))## Cria uma nova coluna com os novos valores convertidos entre 0 a 5
@@ -117,13 +124,12 @@ class Recommendation:
 
     def getReviews(self, userId):
         ## Retorna uma lista com os reviews de um usuario
+        for user in self.users:
+            print(user)
         print(type(userId))
         print(userId)
         reviews = self.dt_for_comments[(self.dt_for_comments[sv.AUTHOR_STEAMID] == int(userId))]
-        review = self.dt_for_comments[self.dt_for_comments.eq(userId).any(axis=1)]
-        print(review[sv.REVIEW].tolist())
-        print(reviews[sv.REVIEW].tolist())
-        return reviews[sv.REVIEW]
+        return reviews[[sv.REVIEW, sv.APP_NAME]]
 
 
     def __get_game_id(game_title, metadata):

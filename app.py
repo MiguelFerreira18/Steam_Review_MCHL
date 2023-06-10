@@ -17,7 +17,8 @@ def users():
     if(recomendationSystem is None):
         recomendationSystem = Recommendation()
     print(recomendationSystem.users[0])
-    users = recomendationSystem.users.tolist()
+    users = [str(user) for user in recomendationSystem.users] 
+
     return jsonify(users)
 
 @app.route("/invoke-function", methods=['POST'])
@@ -25,7 +26,9 @@ def invoke_function():
     selected_user = request.form.get('selected_user')
     print(selected_user)
     allReviews = recomendationSystem.getReviews(selected_user)
-    users = recomendationSystem.users.tolist()
+    for x in allReviews:
+        print(x)
+    users = recomendationSystem.users
     print(allReviews.values.tolist())
     return jsonify(users=users, allReviews=allReviews.values.tolist())
 
