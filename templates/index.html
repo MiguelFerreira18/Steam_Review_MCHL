@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <title>Document</title>
+  <style>
+    .container {
+      margin-top: 50px;
+    }
+
+    #reviewsList {
+      margin-top: 20px;
+    }
+
+    .form-select {
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="mb-3">
+      <select id="myDropdown" name="users" title="Select a user" class="form-select" onchange="fillReviews()">
+      </select>
+    </div>
+    <div>
+      <div id="reviewsList" class="row"></div>
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="submit()">Submit</button>
+  </div>
+  <div class="container" id="recomendations">
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+    integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+    integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    var myUsers;
+
+    function getStatus() {
+      console.log('Getting status');
+      $.ajax({
+        url: '/users',
+        type: 'POST',
+        success: function (response) {
+          myUsers = response
+          console.log(response)
+          populateDropdown(response);
+
+        },
+        error: function () {
+          console.log('Failed to get status');
+        }
+      });
+    }
+    getStatus();
+
+    function populateDropdown(data) {
+      var dropdown = $('#myDropdown');
+
+      // Clear any existing options
+      dropdown.empty();
+
+      // Check if data is an array
+      if (Array.isArray(data)) {
+        // Iterate over the array and create options
+        $.each(data, function (index, item) {
+          dropdown.append($('<option></option>').val(item).text(item));
+        });
+      } else {
+        console.log('Invalid data format');
+      }
+    }
+
+    function fillReviews() {
+      var selectedUser = {
+        "selected_user": $("#myDropdown option:selected").val()
+      };
+      $.ajax({
+        url: "/invoke-function",
+        type: "POST",
+        data: selectedUser,
+        success: function (response) {
+          console.log(response)
+          // Clear the existing list
+          $("#reviewsList").empty();
+
+          // Iterate over each review and game pair
+          $.each(response.allReviews, function (index, reviewPair) {
+            // Check if the pair has both review and game
+            if (reviewPair.length === 2) {
+              var review = reviewPair[0];
+              var game = reviewPair[1];
+
+              var reviewColumn = $('<div>').addClass('col-md-6');
+              var reviewCard = $('<div>').addClass('card mb-3');
+
+              // Review content
+              var reviewCardBody = $('<div>').addClass('card-body');
+              var reviewText = $('<p>').addClass('card-text').text(review);
+              reviewCardBody.append(reviewText);
+
+              // Game content
+              var gameCardBody = $('<div>').addClass('card-body');
+              var gameTitle = $('<h5>').addClass('card-title').text(game);
+              gameCardBody.append(gameTitle);
+
+              // Combine review and game content in the card
+              reviewCard.append(reviewCardBody);
+              reviewCard.append(gameCardBody);
+
+              // Append the card to the row
+              reviewColumn.append(reviewCard);
+              $("#reviewsList").append(reviewColumn);
+            }
+          });
+        },
+        error: function (error) {
+          // Handle any errors that occur during the request
+          console.error("Error:", error);
+        }
+      });
+    }
+
+    function submit() {
+      var selectedUser = {
+        "selected_user": $("#myDropdown option:selected").val()
+      };
+
+      $.ajax({
+        url: "/submit",
+        type: "POST",
+        data: selectedUser,
+        success: function (response) {
+          var recommendations = response;
+          console.log(recommendations)
+
+          var recommendationsContainer = $('#recomendations');
+
+          // Clear any existing recommendations
+          recommendationsContainer.empty();
+
+          // Create a card for each recommendation
+          $.each(recommendations, function (index, recommendation) {
+            var card = $('<div>').addClass('card mb-3').attr('id', 'recommendationCard');
+            var cardBody = $('<div>').addClass('card-body').attr('id', 'recommendationCardBody');
+            var title = $('<h5>').addClass('card-title').attr('id', 'recommendationTitle').text(recommendation);
+
+            $('#recommendationCard').css('margin-bottom', '20px');
+            $('#recommendationCardBody').css('padding', '20px');
+            cardBody.append(title);
+            card.append(cardBody);
+            recommendationsContainer.append(card);
+          });
+
+        },
+        error: function (error) {
+          // Handle any errors that occur during the request
+          console.error("Error:", error);
+        }
+      });
+    }
+
+  </script>
+</body>
+
+</html>

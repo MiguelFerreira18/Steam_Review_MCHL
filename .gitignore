@@ -2,3 +2,41 @@ D:\GitHubProjects\Steam_Review_MCHL\ApiKey.py
 *.csv
 __pycache__/SteamVariables.cpython-310.pyc
 __pycache__/SteamVariables.cpython-39.pyc
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+
+# Dependency directories
+env/
+venv/
+env.bak/
+venv.bak/
+env32/
+venv32/
+
+# Virtual environment
+.venv/
+
+# Environment configuration
+.env
+
+# Logs and databases
+*.log
+*.sqlite
+
+# Static files
+/static/
+
+# Compiled templates
+/templates/*.pyc
+
+# IDE files
+.vscode/
+.idea/
+
+# Editor-specific files
+*~
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
